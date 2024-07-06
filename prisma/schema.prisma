@@ -1,0 +1,60 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Note that some adapters may set a maximum length for the String type by default, please ensure your strings are long
+// enough when changing adapters.
+// See https://www.prisma.io/docs/orm/reference/prisma-schema-reference#string for more information
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model Session {
+  id          String    @id @default(auto()) @map("_id") @db.ObjectId
+  shop        String
+  state       String
+  isOnline    Boolean   @default(false)
+  scope       String?
+  expires     DateTime?
+  accessToken String
+  userId      BigInt?
+}
+model Shop {
+  id            String   @id @default(auto()) @map("_id") @db.ObjectId
+  shop          String   @unique @map("shop")
+  accessToken   String   @map("accessToken")
+  phone         String?  @map("phone")
+  name          String   @map("name")
+  countryCode   String   @map("countryCode")
+  countryName   String   @map("countryName")
+  accessScope   String[] @map("accessScope")
+  domain        String?  @unique @map("domain")
+  email         String?  @map("email")
+  appStatus     String?  @default("installed") @map("appStatus")
+  currency      String?  @map("currency")
+  timezone      String?  @map("timezone")
+  address1      String?  @map("address1")
+  zip           String?  @map("zip")
+  city          String?  @map("city")
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model product {
+  id                String   @id @default(auto()) @map("_id") @db.ObjectId
+  productId         String
+  title             String
+  descriptionHtml   String?
+  category          String?
+  vendor            String?
+  tags              String[]
+  status            String?
+  price             Int?
+  cost              Int?
+  availableQuantity Int?
+  image             String[]
+}
